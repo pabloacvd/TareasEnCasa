@@ -23,10 +23,17 @@ public class Casa {
 
     private void mostrarResultados(ResultSet resultados) throws SQLException {
         if(resultados != null)
-            while(resultados.next())
-                System.out.println("Nombre: "+resultados.getString("nombre"));
+            while(resultados.next()) {
+                System.out.println(resultados.getInt("id")+": " + resultados.getString("nombre")+
+                        " - "+resultados.getString("responsable"));
+            }
     }
-
+    public void mostrarTareaPorResponsable(String responsable){
+        buscarYMostrar("SELECT * FROM tareas WHERE responsable = '"+responsable+"'");
+    }
+    public void mostrarTareasPendientesPorResponsable(String responsable){
+        buscarYMostrar("SELECT * FROM tareas WHERE estado = 'PENDIENTE' AND responsable = '"+responsable+"'");
+    }
     public void mostrarTareaPorID(int id){
         buscarYMostrar("SELECT * FROM tareas WHERE id = "+id);
     }
@@ -52,5 +59,18 @@ public class Casa {
             conexionDB.cerrar();
         }
         return respuesta;
+    }
+
+    public void cambiarEstadoDeTarea(int idACambiar, int idEstado) {
+        ConexionDB conexionDB = new ConexionDB(dbName,dbUser,dbPwd);
+        String estado = Estado.values()[idEstado].name();
+        String sql = "UPDATE tareas SET estado='"+estado+"' WHERE (id="+idACambiar+");";
+        try {
+            conexionDB.insertar(sql);
+        }catch(SQLException e){
+            System.out.println("No se pudo modificar la tarea.");
+        }finally {
+            conexionDB.cerrar();
+        }
     }
 }
