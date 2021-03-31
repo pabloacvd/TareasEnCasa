@@ -1,5 +1,6 @@
 package ar.com.xeven;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -20,6 +21,7 @@ public class Main {
         System.out.println("\n\n\tVamos a cambiar el estado de una tarea.\n\n");
         System.out.println("Estas son las tareas:");
         casa.listarTareas();
+        /*
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingresá el ID de la tarea que querés cambiar: ");
         int idACambiar = Integer.parseInt(sc.nextLine());
@@ -29,5 +31,13 @@ public class Main {
         casa.cambiarEstadoDeTarea(idACambiar, idEstado);
         System.out.println("Las tareas son: ");
         casa.listarTareas();
+        */
+        List<Tarea> tareas = casa.getListaTareas();
+
+        for(Tarea t : tareas){
+            System.out.println("Tarea de la lista: "+t.getNombre());
+        }
+
+
     }
 }

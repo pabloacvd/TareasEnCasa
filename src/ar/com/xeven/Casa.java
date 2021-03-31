@@ -2,6 +2,8 @@ package ar.com.xeven;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Casa {
 
@@ -39,6 +41,28 @@ public class Casa {
     }
     public void listarTareas() {
         buscarYMostrar("SELECT * FROM tareas;");
+    }
+
+    public List<Tarea> getListaTareas(){
+        List<Tarea> lista = new ArrayList<>();
+        ConexionDB conexionDB = new ConexionDB(dbName,dbUser,dbPwd);
+        ResultSet resultados = conexionDB.consultar("SELECT * FROM tareas;");
+        try{
+            if(resultados!=null){
+                while(resultados.next()){
+                    String nombreTarea = resultados.getString("nombre");
+                    String responsable = resultados.getString("responsable");
+                    Estado estado = Estado.valueOf(resultados.getString("estado"));
+                    Tarea tarea = new Tarea(nombreTarea, responsable, estado);
+                    lista.add(tarea);
+                }
+            }
+        }catch(SQLException e){
+            System.out.println("No se encontraron resultados.");
+        }finally {
+            conexionDB.cerrar();
+        }
+        return lista;
     }
 
     public boolean agregarTarea(Tarea tarea) {
